@@ -1,1 +1,1 @@
-# CardMaker
+CardMaker is a React-based application designed for crafting, managing, and viewing custom cards. This project encompasses a central application component that incorporates routing to specialized components such as CardCreator for designing cards, CardList for browsing the collection, and CardView for detailed card presentations. It's a versatile tool for users looking to create personalized cards for various occasions or purposes.
