@@ -1,0 +1,6 @@
+github.com/gorilla/mux v1.8.0 h1:o7N/JfWx6zqFY0HRUXrPKqxgAOCBd5QmnZ4pNkbr/P4=
+github.com/gorilla/mux v1.8.0/go.mod h1:yQ9mMXG5bP1aOAPyCqdcZV2ElcIPuyLsVQF4KDhtJbY=
+github.com/jinzhu/gorm v1.9.16 h1:54/NaxzyW8gDUuHYyfTTN+ZPtjSiK/9T2zD64EjXY1Y=
+github.com/jinzhu/gorm v1.9.16/go.mod h1:sGmFspLYRRy1Skx0vC4kzHfH/0lB8X/W0ct5Gqs/HR4=
+golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b h1:DRosYc5X0PT3WzvjoRU5M07prGfpPzN3IHT8MiIN8Qs=
+golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b/go.mod h1:vzwE7dH9NEQEd7LCWWGOygo7xqX4nsvPDWPcD6KEmlk=
