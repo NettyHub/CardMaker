@@ -11,26 +11,9 @@ const GreetingCardCreator = () => {
   const [message, setMessage] = useState('');
   const [image, setImage] = useState(null);
 
-  const handleTemplateChange = (e) => {
-    setTemplate(e.target.value);
-  };
-
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
-  };
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('template', template);
-    formData.append('message', message);
-    formData.append('image', image);
-
-    console.log('Form submitted. Template:', template, 'Message:', message, 'Image:', image.name);
+    console.log(`Form submitted.\nTemplate: ${template}\nMessage: ${message}\nImage: ${image ? image.name : 'No image selected'}.`);
   };
 
   return (
@@ -39,23 +22,38 @@ const GreetingCardCreator = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="template">Choose a Template:</label>
-          <select id="template" value={template} onChange={handleTemplateChange}>
+          <select 
+            id="template" 
+            value={template} 
+            onChange={({ target }) => setTemplate(target.value)}
+          >
             <option value="">Select a Template</option>
-            {TEMPLATES.map((temp) => (
-              <option key={temp.id} value={temp.name}>
-                {temp.name}
+            {TEMPLATES.map(({ id, name }) => (
+              <option key={id} value={name}>
+                {name}
               </option>
             ))}
           </select>
         </div>
+
         <div>
           <label htmlFor="message">Your Message:</label>
-          <textarea id="message" value={message} onChange={handleMessageChange}></textarea>
+          <textarea 
+            id="message" 
+            value={message} 
+            onChange={({ target }) => setMessage(target.value)}
+          />
         </div>
+
         <div>
           <label htmlFor="image">Upload an Image:</label>
-          <input type="file" id="image" onChange={handleImageChange} />
+          <input 
+            type="file" 
+            id="image" 
+            onChange={({ target }) => setImage(target.files[0])} 
+          />
         </div>
+
         <button type="submit">Create Card</button>
       </form>
     </div>
