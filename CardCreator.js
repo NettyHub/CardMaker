@@ -13,7 +13,8 @@ const GreetingCardCreator = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Form submitted.\nTemplate: ${template}\nMessage: ${message}\nImage: ${image ? image.name : 'No image selected'}.`);
+    const imageName = image ? image.name : 'No image selected';
+    console.log(`Form submitted.\nTemplate: ${template}\nMessage: ${message}\nImage: ${imageName}.`);
   };
 
   return (
@@ -22,9 +23,9 @@ const GreetingCardCreator = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="template">Choose a Template:</label>
-          <select 
-            id="template" 
-            value={template} 
+          <select
+            id="template"
+            value={template}
             onChange={({ target }) => setTemplate(target.value)}
           >
             <option value="">Select a Template</option>
@@ -38,19 +39,19 @@ const GreetingCardCreator = () => {
 
         <div>
           <label htmlFor="message">Your Message:</label>
-          <textarea 
-            id="message" 
-            value={message} 
+          <textarea
+            id="message"
+            value={message}
             onChange={({ target }) => setMessage(target.value)}
           />
         </div>
 
         <div>
           <label htmlFor="image">Upload an Image:</label>
-          <input 
-            type="file" 
-            id="image" 
-            onChange={({ target }) => setImage(target.files[0])} 
+          <input
+            type="file"
+            id="image"
+            onChange={({ target }) => setImage(target.files[0])}
           />
         </div>
 
