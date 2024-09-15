@@ -1,7 +1,10 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
+
 dotenv.config();
+
 const BASE_URL = process.env.API_BASE_URL;
+
 const createCard = async (data) => {
   try {
     const response = await axios.post(`${BASE_URL}/cards`, data);
@@ -11,6 +14,7 @@ const createCard = async (data) => {
     throw error;
   }
 };
+
 const getAllCards = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/cards`);
@@ -20,6 +24,7 @@ const getAllCards = async () => {
     throw error;
   }
 };
+
 const getCardById = async (id) => {
   try {
     const response = await axios.get(`${BASE_URL}/cards/${id}`);
@@ -29,6 +34,7 @@ const getCardById = async (id) => {
     throw error;
   }
 };
+
 const updateCard = async (id, updateData) => {
   try {
     const response = await axios.put(`${BASE_URL}/cards/${id}`, updateData);
@@ -38,6 +44,7 @@ const updateCard = async (id, updateData) => {
     throw error;
   }
 };
+
 const deleteCard = async (id) => {
   try {
     const response = await axios.delete(`${BASE_URL}/cards/${id}`);
@@ -47,10 +54,11 @@ const deleteCard = async (id) => {
     throw error;
   }
 };
+
 export {
   createCard,
   getAllCards,
   getCardById,
   updateCard,
-  deleteCard
+  deleteCard,
 };
