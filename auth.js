@@ -5,27 +5,49 @@ require('dotenv').config();
 const users = []; 
 
 function hashPassword(password) {
-    return bcrypt.hashSync(password, 8);
+    try {
+        return bcrypt.hashSync(password, 8);
+    } catch (error) {
+        throw new Error('Error hashing password');
+    }
 }
 
 function verifyPassword(inputPassword, hashedPassword) {
-    return bcrypt.compareSync(inputPassword, hashedPassword);
+    try {
+        return bcrypt.compareSync(inputPassword, hashedPassword);
+    } catch (error) {
+        throw new Error('Error verifying password');
+    }
 }
 
 function generateToken(user) {
-    return jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    try {
+        return jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    } catch (error) {
+        throw new Error('Error generating token');
+    }
 }
 
 function register(username, password) {
-    const hashedPassword = hashPassword(password);
-    const newUser = {
-        id: users.length + 1,
-        username,
-        password: hashedPassword,
-    };
-    users.push(newUser);
+    const userExists = users.some((user) => user.username === username);
+    if(userExists){
+        return { error: "Username already exists" };
+    }
 
-    return { message: "User registered successfully", user: newUser };
+    try {
+        const hashedPassword = hashPassword(password);
+        const newUser = {
+            id: users.length + 1,
+            username,
+            password: hashedPassword,
+        };
+        users.push(newUser);
+
+        return { message: "User registered successfully", user: newUser };
+    } catch (error) {
+        return { error: "Failed to register user" };
+    }
+    
 }
 
 function login(username, password) {
@@ -34,14 +56,20 @@ function login(username, password) {
     if(!user) {
         return { error: "User not found" };
     }
-    const passwordIsValid = verifyPassword(password, user.password);
-    
-    if (!passwordIsValid) {
-        return { error: "Password is incorrect" };
-    }
 
-    const token = generateToken(user);
-    return { message: "Login successful", token: token };
+    try {
+        const passwordIsValid = verifyPassword(password, user.password);
+        
+        if (!passwordIsValid) {
+            return { error: "Password is incorrect" };
+        }
+
+        const token = generateToken(user);
+        return { message: "Login successful", token: token };
+    } catch (error) {
+        return { error: "Login failed" };
+    }
+    
 }
 
 function isAuthenticated(req, res, next) {
