@@ -2,25 +2,32 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const users = []; 
+const users = [];
 
-function hashPassword(password) {
+async function hashPassword(password) {
     try {
-        return bcrypt.hashSync(password, 8);
+        const salt = await bcrypt.genSalt(10);
+        return await bcrypt.hash(password, salt);
     } catch (error) {
         throw new Error('Error hashing password');
     }
 }
 
-function verifyPassword(inputPassword, hashedPassword) {
+async function verifyPassword(inputPassword, hashedPassword) {
     try {
-        return bcrypt.compareSync(inputPassword, hashedPassword);
+        return await bcrypt.compare(inputPassword, hashedPassword);
     } catch (error) {
         throw new Error('Error verifying password');
     }
 }
 
 function generateToken(user) {
+    // Ensure your JWT_SECRET is defined; otherwise, log a warning or throw an error
+    if (!process.env.JWT_SECRET) {
+        console.warn('JWT_SECRET is not defined. Please set it in your .env file');
+        throw new Error('JWT_SECRET is not defined');
+    }
+    
     try {
         return jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
     } catch (error) {
@@ -28,14 +35,14 @@ function generateToken(user) {
     }
 }
 
-function register(username, password) {
+async function register(username, password) {
     const userExists = users.some((user) => user.username === username);
     if(userExists){
         return { error: "Username already exists" };
     }
 
     try {
-        const hashedPassword = hashPassword(password);
+        const hashedPassword = await hashPassword(password);
         const newUser = {
             id: users.length + 1,
             username,
@@ -50,7 +57,7 @@ function register(username, password) {
     
 }
 
-function login(username, password) {
+async function login(username, password) {
     const user = users.find((user) => user.username === username);
 
     if(!user) {
@@ -58,7 +65,7 @@ function login(username, password) {
     }
 
     try {
-        const passwordIsValid = verifyPassword(password, user.password);
+        const passwordIsValid = await verifyPassword(password, user.password);
         
         if (!passwordIsValid) {
             return { error: "Password is incorrect" };
@@ -73,7 +80,7 @@ function login(username, password) {
 }
 
 function isAuthenticated(req, res, next) {
-    const token = req.headers['authorization']?.split(' ')[1]; 
+    const token = req.headers['authorization']?.split(' ')[1];
 
     if (!token) {
         return res.status(403).send({ message: "A token is required for authentication" });
