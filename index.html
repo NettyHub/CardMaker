@@ -4,11 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frontend Application</title>
+    <style>
+        /* Define color variables for light and dark themes */
+        :root {
+            --background-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #121212;
+            --text-color: #ffffff;
+        }
+        
+        /* Apply color variables */
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Style the theme toggle button */
+        .theme-toggle-button {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        [data-theme="dark"] .theme-toggle-button {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
     <script>
         const API_URL = `${process.env.API_URL}`;
+
+        // Function to toggle dark and light themes
+        function toggleTheme() {
+            if (document.documentElement.hasAttribute("data-theme")) {
+                document.documentElement.removeAttribute("data-theme");
+                localStorage.removeItem("theme");
+            } else {
+                document.documentElement.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            }
+        }
+
+        // Function to apply saved or system theme preference on load
+        function applyThemePreference() {
+            const savedTheme = localStorage.getItem("theme");
+            const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+            if (savedTheme) {
+                document.documentElement.setAttribute("data-theme", savedTheme);
+            } else if (prefersDarkMode) {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        }
+        
     </script>
 </head>
-<body>
+<body onload="applyThemePreference()">
+    <button class="theme-toggle-button" onclick="toggleTheme()">Toggle Theme</button>
     <script src="app.js"></script>
 </body>
 </html>
